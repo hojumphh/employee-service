@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee_service in employee-service Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.hotoniel.employee_service.mapper</a> &gt; <span class="el_source">EmployeeMapper.java</span></div><h1>EmployeeMapper.java</h1><pre class="source lang-java linenums">package com.hotoniel.employee_service.mapper;
+
+import com.hotoniel.employee_service.domain.entity.Employee;
+import com.hotoniel.employee_service.dto.request.EmployeeRequest;
+import com.hotoniel.employee_service.dto.response.EmployeeResponse;
+import org.springframework.stereotype.Component;
+
+@Component
+<span class="fc" id="L9">public class EmployeeMapper {</span>
+
+    public Employee toEntity(EmployeeRequest request) {
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        if (request == null) return null;</span>
+<span class="fc" id="L13">        return Employee.builder()</span>
+<span class="fc" id="L14">                .firstName(request.getFirstName())</span>
+<span class="fc" id="L15">                .middleName(request.getMiddleName())</span>
+<span class="fc" id="L16">                .lastName(request.getLastName())</span>
+<span class="fc" id="L17">                .maternalLastName(request.getMaternalLastName())</span>
+<span class="fc" id="L18">                .age(request.getAge())</span>
+<span class="fc" id="L19">                .gender(request.getGender())</span>
+<span class="fc" id="L20">                .birthDate(request.getBirthDate())</span>
+<span class="fc" id="L21">                .position(request.getPosition())</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">                .active(request.getActive() != null ? request.getActive() : true)</span>
+<span class="fc" id="L23">                .build();</span>
+    }
+
+    public EmployeeResponse toResponse(Employee employee) {
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (employee == null) return null;</span>
+<span class="fc" id="L28">        return EmployeeResponse.builder()</span>
+<span class="fc" id="L29">                .id(employee.getId())</span>
+<span class="fc" id="L30">                .firstName(employee.getFirstName())</span>
+<span class="fc" id="L31">                .middleName(employee.getMiddleName())</span>
+<span class="fc" id="L32">                .lastName(employee.getLastName())</span>
+<span class="fc" id="L33">                .maternalLastName(employee.getMaternalLastName())</span>
+<span class="fc" id="L34">                .age(employee.getAge())</span>
+<span class="fc" id="L35">                .gender(employee.getGender())</span>
+<span class="fc" id="L36">                .birthDate(employee.getBirthDate())</span>
+<span class="fc" id="L37">                .position(employee.getPosition())</span>
+<span class="fc" id="L38">                .createdAt(employee.getCreatedAt())</span>
+<span class="fc" id="L39">                .active(employee.getActive())</span>
+<span class="fc" id="L40">                .build();</span>
+    }
+
+    public void updateEntity(Employee employee, EmployeeRequest request) {
+<span class="fc" id="L44">        employee.setFirstName(request.getFirstName());</span>
+<span class="fc" id="L45">        employee.setMiddleName(request.getMiddleName());</span>
+<span class="fc" id="L46">        employee.setLastName(request.getLastName());</span>
+<span class="fc" id="L47">        employee.setMaternalLastName(request.getMaternalLastName());</span>
+<span class="fc" id="L48">        employee.setAge(request.getAge());</span>
+<span class="fc" id="L49">        employee.setGender(request.getGender());</span>
+<span class="fc" id="L50">        employee.setBirthDate(request.getBirthDate());</span>
+<span class="fc" id="L51">        employee.setPosition(request.getPosition());</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (request.getActive() != null) {</span>
+<span class="fc" id="L53">            employee.setActive(request.getActive());</span>
+        }
+<span class="fc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

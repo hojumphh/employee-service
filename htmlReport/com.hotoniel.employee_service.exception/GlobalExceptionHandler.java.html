@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee_service in employee-service Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.hotoniel.employee_service.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.hotoniel.employee_service.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestControllerAdvice
+<span class="fc" id="L15">public class GlobalExceptionHandler {</span>
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity handleEmployeeNotFound(EmployeeNotFoundException ex) {
+<span class="fc" id="L19">        Map&lt;String, Object&gt; error = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L20">        error.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="fc" id="L21">        error.put(&quot;status&quot;, HttpStatus.NOT_FOUND.value());</span>
+<span class="fc" id="L22">        error.put(&quot;error&quot;, &quot;Not Found&quot;);</span>
+<span class="fc" id="L23">        error.put(&quot;message&quot;, ex.getMessage());</span>
+<span class="fc" id="L24">        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);</span>
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity handleValidationExceptions(MethodArgumentNotValidException ex) {
+<span class="nc" id="L29">        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L30">        ex.getBindingResult().getAllErrors().forEach((error) -&gt; {</span>
+<span class="nc" id="L31">            String fieldName = ((FieldError) error).getField();</span>
+<span class="nc" id="L32">            String errorMessage = error.getDefaultMessage();</span>
+<span class="nc" id="L33">            errors.put(fieldName, errorMessage);</span>
+<span class="nc" id="L34">        });</span>
+
+<span class="nc" id="L36">        Map&lt;String, Object&gt; response = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L37">        response.put(&quot;timestamp&quot;, LocalDateTime.now());</span>
+<span class="nc" id="L38">        response.put(&quot;status&quot;, HttpStatus.BAD_REQUEST.value());</span>
+<span class="nc" id="L39">        response.put(&quot;error&quot;, &quot;Validation Failed&quot;);</span>
+<span class="nc" id="L40">        response.put(&quot;details&quot;, errors);</span>
+<span class="nc" id="L41">        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

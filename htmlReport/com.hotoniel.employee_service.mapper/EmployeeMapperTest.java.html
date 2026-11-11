@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmployeeMapperTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee_service in employee-service Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.hotoniel.employee_service.mapper</a> &gt; <span class="el_source">EmployeeMapperTest.java</span></div><h1>EmployeeMapperTest.java</h1><pre class="source lang-java linenums">package com.hotoniel.employee_service.mapper;
+
+import com.hotoniel.employee_service.domain.entity.Employee;
+import com.hotoniel.employee_service.domain.enums.Gender;
+import com.hotoniel.employee_service.dto.request.EmployeeRequest;
+import com.hotoniel.employee_service.dto.response.EmployeeResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+<span class="fc" id="L15">class EmployeeMapperTest {</span>
+
+    private EmployeeMapper employeeMapper;
+
+    @BeforeEach
+    void setUp() {
+<span class="fc" id="L21">        employeeMapper = new EmployeeMapper();</span>
+<span class="fc" id="L22">    }</span>
+
+    @Test
+    void toEntity_ShouldMapCorrectly() {
+<span class="fc" id="L26">        EmployeeRequest request = EmployeeRequest.builder()</span>
+<span class="fc" id="L27">                .firstName(&quot;John&quot;)</span>
+<span class="fc" id="L28">                .middleName(&quot;Michael&quot;)</span>
+<span class="fc" id="L29">                .lastName(&quot;Doe&quot;)</span>
+<span class="fc" id="L30">                .maternalLastName(&quot;Smith&quot;)</span>
+<span class="fc" id="L31">                .age(30)</span>
+<span class="fc" id="L32">                .gender(Gender.MALE)</span>
+<span class="fc" id="L33">                .birthDate(LocalDate.of(1994, 5, 12))</span>
+<span class="fc" id="L34">                .position(&quot;Developer&quot;)</span>
+<span class="fc" id="L35">                .active(true)</span>
+<span class="fc" id="L36">                .build();</span>
+
+<span class="fc" id="L38">        Employee employee = employeeMapper.toEntity(request);</span>
+
+<span class="fc" id="L40">        assertThat(employee).isNotNull();</span>
+<span class="fc" id="L41">        assertThat(employee.getFirstName()).isEqualTo(&quot;John&quot;);</span>
+<span class="fc" id="L42">        assertThat(employee.getMaternalLastName()).isEqualTo(&quot;Smith&quot;);</span>
+<span class="fc" id="L43">    }</span>
+
+    @Test
+    void toEntity_ShouldReturnNull_WhenRequestIsNull() {
+<span class="fc" id="L47">        assertThat(employeeMapper.toEntity(null)).isNull();</span>
+<span class="fc" id="L48">    }</span>
+
+    @Test
+    void toResponse_ShouldMapCorrectly() {
+<span class="fc" id="L52">        Employee employee = Employee.builder()</span>
+<span class="fc" id="L53">                .id(1L)</span>
+<span class="fc" id="L54">                .firstName(&quot;John&quot;)</span>
+<span class="fc" id="L55">                .lastName(&quot;Doe&quot;)</span>
+<span class="fc" id="L56">                .maternalLastName(&quot;Smith&quot;)</span>
+<span class="fc" id="L57">                .age(30)</span>
+<span class="fc" id="L58">                .gender(Gender.MALE)</span>
+<span class="fc" id="L59">                .birthDate(LocalDate.of(1994, 5, 12))</span>
+<span class="fc" id="L60">                .position(&quot;Developer&quot;)</span>
+<span class="fc" id="L61">                .createdAt(LocalDateTime.now())</span>
+<span class="fc" id="L62">                .active(true)</span>
+<span class="fc" id="L63">                .build();</span>
+
+<span class="fc" id="L65">        EmployeeResponse response = employeeMapper.toResponse(employee);</span>
+
+<span class="fc" id="L67">        assertThat(response).isNotNull();</span>
+<span class="fc" id="L68">        assertThat(response.getId()).isEqualTo(1L);</span>
+<span class="fc" id="L69">        assertThat(response.getFirstName()).isEqualTo(&quot;John&quot;);</span>
+<span class="fc" id="L70">    }</span>
+
+    @Test
+    void toResponse_ShouldReturnNull_WhenEmployeeIsNull() {
+<span class="fc" id="L74">        assertThat(employeeMapper.toResponse(null)).isNull();</span>
+<span class="fc" id="L75">    }</span>
+
+    @Test
+    void updateEntity_ShouldUpdateFields() {
+<span class="fc" id="L79">        Employee employee = new Employee();</span>
+<span class="fc" id="L80">        EmployeeRequest request = EmployeeRequest.builder()</span>
+<span class="fc" id="L81">                .firstName(&quot;Jane&quot;)</span>
+<span class="fc" id="L82">                .middleName(&quot;A.&quot;)</span>
+<span class="fc" id="L83">                .lastName(&quot;Smith&quot;)</span>
+<span class="fc" id="L84">                .maternalLastName(&quot;Johnson&quot;)</span>
+<span class="fc" id="L85">                .age(25)</span>
+<span class="fc" id="L86">                .gender(Gender.FEMALE)</span>
+<span class="fc" id="L87">                .birthDate(LocalDate.of(1999, 1, 1))</span>
+<span class="fc" id="L88">                .position(&quot;Tester&quot;)</span>
+<span class="fc" id="L89">                .active(false)</span>
+<span class="fc" id="L90">                .build();</span>
+
+<span class="fc" id="L92">        employeeMapper.updateEntity(employee, request);</span>
+
+<span class="fc" id="L94">        assertThat(employee.getFirstName()).isEqualTo(&quot;Jane&quot;);</span>
+<span class="fc" id="L95">        assertThat(employee.getActive()).isFalse();</span>
+<span class="fc" id="L96">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>

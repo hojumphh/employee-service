@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Employee.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">employee_service in employee-service Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.hotoniel.employee_service.domain.entity</a> &gt; <span class="el_source">Employee.java</span></div><h1>Employee.java</h1><pre class="source lang-java linenums">package com.hotoniel.employee_service.domain.entity;
+
+import com.hotoniel.employee_service.domain.enums.Gender;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;employees&quot;)
+@Getter
+<span class="fc" id="L14">@Setter</span>
+<span class="fc" id="L15">@NoArgsConstructor</span>
+<span class="fc" id="L16">@AllArgsConstructor</span>
+<span class="pc" id="L17">@Builder</span>
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="fc" id="L22">    private Long id;</span>
+    @Column(nullable = false)
+<span class="fc" id="L24">    private String firstName;</span>
+<span class="fc" id="L25">    private String middleName;</span>
+    @Column(nullable = false)
+<span class="fc" id="L27">    private String lastName;</span>
+<span class="fc" id="L28">    private String maternalLastName;</span>
+    @Column(nullable = false)
+<span class="fc" id="L30">    private Integer age;</span>
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+<span class="fc" id="L33">    private Gender gender;</span>
+    @Column(nullable = false)
+<span class="fc" id="L35">    private LocalDate birthDate;</span>
+    @Column(nullable = false)
+<span class="fc" id="L37">    private String position;</span>
+    @Column(nullable = false)
+<span class="fc" id="L39">    private Boolean active;</span>
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+<span class="fc" id="L42">    private LocalDateTime createdAt;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.15.202606040825</span></div></body></html>
