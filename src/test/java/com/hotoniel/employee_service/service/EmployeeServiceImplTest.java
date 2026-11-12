@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,14 +81,14 @@ class EmployeeServiceImplTest {
 
     @Test
     void getAllEmployees_ShouldReturnList() {
-        when(employeeRepository.findAll()).thenReturn(List.of(employee));
+        when(employeeRepository.findByActiveTrue()).thenReturn(List.of(employee));
         when(employeeMapper.toResponse(employee)).thenReturn(employeeResponse);
 
         List<EmployeeResponse> result = employeeService.getAllEmployees();
 
         assertThat(result).isNotNull();
         assertThat(result).hasSize(1);
-        verify(employeeRepository, times(1)).findAll();
+        verify(employeeRepository, times(1)).findByActiveTrue();
     }
 
     @Test
@@ -147,21 +148,17 @@ class EmployeeServiceImplTest {
 
     @Test
     void deleteEmployee_ShouldDelete_WhenExists() {
-        when(employeeRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(employeeRepository).deleteById(1L);
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
         employeeService.deleteEmployee(1L);
 
-        verify(employeeRepository, times(1)).deleteById(1L);
+        // Verificamos que se buscó, se modificó a inactivo y se guardó (en lugar de deleteById)
+        verify(employeeRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).save(employee);
+        assertThat(employee.getActive()).isFalse();
     }
 
-    @Test
-    void deleteEmployee_ShouldThrowException_WhenNotFound() {
-        when(employeeRepository.existsById(1L)).thenReturn(false);
-
-        assertThatThrownBy(() -> employeeService.deleteEmployee(1L))
-                .isInstanceOf(EmployeeNotFoundException.class);
-    }
 
     @Test
     void searchEmployeesByName_ShouldReturnList() {

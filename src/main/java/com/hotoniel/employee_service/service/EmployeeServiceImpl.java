@@ -23,7 +23,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional(readOnly = true)
     public List<EmployeeResponse> getAllEmployees() {
-        return employeeRepository.findAll().stream()
+        return employeeRepository.findByActiveTrue().stream()
                 .map(employeeMapper::toResponse)
                 .collect(Collectors.toList());
     }
@@ -64,10 +64,11 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional
     public void deleteEmployee(Long id) {
-        if (!employeeRepository.existsById(id)) {
-            throw new EmployeeNotFoundException("Employee not found with id: " + id);
-        }
-        employeeRepository.deleteById(id);
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
+        employee.setActive(false);
+        employeeRepository.save(employee);
     }
 
     @Override
