@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional(readOnly = true)
     public EmployeeResponse getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findById(id)
+        Employee employee = employeeRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
         return employeeMapper.toResponse(employee);
     }
@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest request) {
-        Employee employee = employeeRepository.findById(id)
+        Employee employee = employeeRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
 
         employeeMapper.updateEntity(employee, request);
@@ -65,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
     public void deleteEmployee(Long id) {
 
-        Employee employee = employeeRepository.findById(id)
+        Employee employee = employeeRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new EmployeeNotFoundException("Employee not found with id: " + id));
         employee.setActive(false);
         employeeRepository.save(employee);
@@ -74,7 +74,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional(readOnly = true)
     public List<EmployeeResponse> searchEmployeesByName(String name) {
-        List<Employee> employees = employeeRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
+        List<Employee> employees = employeeRepository.findByActiveTrueAndFirstNameContainingIgnoreCaseOrActiveTrueAndLastNameContainingIgnoreCase(name, name);
         return employees.stream()
                 .map(employeeMapper::toResponse)
                 .collect(Collectors.toList());

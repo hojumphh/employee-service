@@ -93,19 +93,19 @@ class EmployeeServiceImplTest {
 
     @Test
     void getEmployeeById_ShouldReturnEmployee_WhenExists() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByIdAndActiveTrue(1L)).thenReturn(Optional.of(employee));
         when(employeeMapper.toResponse(employee)).thenReturn(employeeResponse);
 
         EmployeeResponse result = employeeService.getEmployeeById(1L);
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        verify(employeeRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).findByIdAndActiveTrue(1L);
     }
 
     @Test
     void getEmployeeById_ShouldThrowException_WhenNotFound() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(employeeRepository.findByIdAndActiveTrue(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> employeeService.getEmployeeById(1L))
                 .isInstanceOf(EmployeeNotFoundException.class)
@@ -127,7 +127,7 @@ class EmployeeServiceImplTest {
 
     @Test
     void updateEmployee_ShouldUpdateAndReturnResponse_WhenExists() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByIdAndActiveTrue(1L)).thenReturn(Optional.of(employee));
         doNothing().when(employeeMapper).updateEntity(any(Employee.class), any(EmployeeRequest.class));
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
         when(employeeMapper.toResponse(employee)).thenReturn(employeeResponse);
@@ -140,7 +140,7 @@ class EmployeeServiceImplTest {
 
     @Test
     void updateEmployee_ShouldThrowException_WhenNotFound() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(employeeRepository.findByIdAndActiveTrue(1L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> employeeService.updateEmployee(1L, employeeRequest))
                 .isInstanceOf(EmployeeNotFoundException.class);
@@ -148,13 +148,13 @@ class EmployeeServiceImplTest {
 
     @Test
     void deleteEmployee_ShouldDelete_WhenExists() {
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(employeeRepository.findByIdAndActiveTrue(1L)).thenReturn(Optional.of(employee));
         when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
 
         employeeService.deleteEmployee(1L);
 
         // Verificamos que se buscó, se modificó a inactivo y se guardó (en lugar de deleteById)
-        verify(employeeRepository, times(1)).findById(1L);
+        verify(employeeRepository, times(1)).findByIdAndActiveTrue(1L);
         verify(employeeRepository, times(1)).save(employee);
         assertThat(employee.getActive()).isFalse();
     }
@@ -162,13 +162,13 @@ class EmployeeServiceImplTest {
 
     @Test
     void searchEmployeesByName_ShouldReturnList() {
-        when(employeeRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase("John", "John"))
+        when(employeeRepository.findByActiveTrueAndFirstNameContainingIgnoreCaseOrActiveTrueAndLastNameContainingIgnoreCase("John", "John"))
                 .thenReturn(List.of(employee));
         when(employeeMapper.toResponse(employee)).thenReturn(employeeResponse);
 
         List<EmployeeResponse> result = employeeService.searchEmployeesByName("John");
 
         assertThat(result).hasSize(1);
-        verify(employeeRepository, times(1)).findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(anyString(), anyString());
+        verify(employeeRepository, times(1)).findByActiveTrueAndFirstNameContainingIgnoreCaseOrActiveTrueAndLastNameContainingIgnoreCase(anyString(), anyString());
     }
 }
